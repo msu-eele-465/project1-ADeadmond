@@ -91,7 +91,7 @@ L1          dec.w   R15                     ; Decrement R15
 ; Delay loop subroutine
 ;------------------------------------------------------------------------------
 Delayloop:
-Wait        mov.w   #1000, R14
+            mov.w   #1000, R14
 D1          dec.w   R14
             jnz     D1
             ret
