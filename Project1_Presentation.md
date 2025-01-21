@@ -11,7 +11,7 @@ One LED was blinked using a delay loop, and the other using an interrupt.
 ![The delay loop flowchart](/docs/assets/Delay_Loop_Flowchart.png)
 
 In order to get the timing correct I found that the microcontroller was using a clock that operated at 227.86 kHz.
-I implemented an inside and outside loop that, together, counted down from 227860. This way it would toggle the LED every second effectively making a 0.5 Hz heartbeat LED.
+I implemented an inside and outside loop that, together, counted down from 228180. This way it would toggle the LED every second effectively making a 0.5 Hz heartbeat LED.
 
 
 
