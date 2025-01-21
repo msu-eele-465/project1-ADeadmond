@@ -83,21 +83,42 @@ SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
             bis.b   #BIT6,&P6DIR            ; P6.6 output
             bic.w   #LOCKLPM5,&PM5CTL0      ; Unlock I/O pins
 
+;-- Setup timer B0 
+            bis.w   #TBCLR, &TB0CTL         ; Clear timers and dividers
+            bis.w   #TBSSEL__ACLK, &TB0CTL  ; Set ACLK as timer source
+            bis.w   #MC__UP, &TB0CTL        ; Choose up counting
+            mov.w   #32768, &TB0CCR0        ; Initialize CCR0 to 32768
+            bis.w   #CCIE, &TB0CCTL0        ; Enable capture/ compare IRQ
+            bic.w   #CCIFG, &TB0CCTL0       ; Clear interrupt flaf
+            bis.w   #GIE, SR                ; Enable maskable interrupts   
+
+            xor.b   #BIT6,&P6OUT            ; Toggle P6.6
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
-Wait        mov.w   #500000,R15              ; Delay to R15
-L1          dec.w   R15
-            mov.w   #10, R14
-D1          dec.w   R14
-            cmp     #0, R14
-            jnz     D1
-            cmp     #0, R15
-            jnz     L1
+Wait        mov.w   #22786,R15              ; Delay to R15
+L1          dec.w   R15                     ; Decrement R15
+            mov.w   #10, R14                ; Delay to R14
+D1          dec.w   R14                     ; Decrement R14
+            cmp     #0, R14                 ; Check if R14 is 0
+            jnz     D1                      ; repeat if R14 wasn't 0
+            cmp     #0, R15                 ; Check if R15 is 0
+            jnz     L1                      ; repeat if R15 wasn't 0
             jmp     Mainloop                ; Again
             NOP
+
+;------------------------------------------------------------------------------
+;           Interrupt Service Routines
+;------------------------------------------------------------------------------
+ISR_TB0_CCR0:
+            xor.b   #BIT6, &P6OUT           ; Toggle P6.6
+            bic.w   #CCIFG, &TB0CCTL0       ; clear interrupt flag
+            reti
 
 ;------------------------------------------------------------------------------
 ;           Interrupt Vectors
 ;------------------------------------------------------------------------------
             .sect   RESET_VECTOR            ; MSP430 RESET Vector
             .short  RESET                   ;
+
+            .sect   ".int43"                ; MSP430 CCR0 Vector
+            .short  ISR_TB0_CCR0
             .end
