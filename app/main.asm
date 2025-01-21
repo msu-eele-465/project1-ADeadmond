@@ -90,10 +90,11 @@ SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
             mov.w   #32768, &TB0CCR0        ; Initialize CCR0 to 32768
             bis.w   #CCIE, &TB0CCTL0        ; Enable capture/ compare IRQ
             bic.w   #CCIFG, &TB0CCTL0       ; Clear interrupt flaf
-            bis.w   #GIE, SR                ; Enable maskable interrupts            
+            bis.w   #GIE, SR                ; Enable maskable interrupts   
 
+            xor.b   #BIT6,&P6OUT            ; Toggle P6.6
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
-Wait        mov.w   #32000,R15             ; Delay to R15
+Wait        mov.w   #22786,R15              ; Delay to R15
 L1          dec.w   R15                     ; Decrement R15
             mov.w   #10, R14                ; Delay to R14
 D1          dec.w   R14                     ; Decrement R14
