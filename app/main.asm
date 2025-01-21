@@ -86,6 +86,11 @@ SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
 Wait        mov.w   #500000,R15              ; Delay to R15
 L1          dec.w   R15
+            mov.w   #10, R14
+D1          dec.w   R14
+            cmp     #0, R14
+            jnz     D1
+            cmp     #0, R15
             jnz     L1
             jmp     Mainloop                ; Again
             NOP
