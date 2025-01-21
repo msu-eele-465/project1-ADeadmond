@@ -93,9 +93,9 @@ SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
             bis.w   #GIE, SR                ; Enable maskable interrupts            
 
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
-Wait        mov.w   #32786,R15             ; Delay to R15
+Wait        mov.w   #32000,R15             ; Delay to R15
 L1          dec.w   R15                     ; Decrement R15
-            mov.w   #100, R14                ; Delay to R14
+            mov.w   #10, R14                ; Delay to R14
 D1          dec.w   R14                     ; Decrement R14
             cmp     #0, R14                 ; Check if R14 is 0
             jnz     D1                      ; repeat if R14 wasn't 0
