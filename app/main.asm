@@ -93,14 +93,14 @@ SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
             bis.w   #GIE, SR                ; Enable maskable interrupts            
 
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
-Wait        mov.w   #500000,R15              ; Delay to R15
-L1          dec.w   R15
-            mov.w   #10, R14
-D1          dec.w   R14
-            cmp     #0, R14
-            jnz     D1
-            cmp     #0, R15
-            jnz     L1
+Wait        mov.w   #500000,R15             ; Delay to R15
+L1          dec.w   R15                     ; Decrement R15
+            mov.w   #10, R14                ; Delay to R14
+D1          dec.w   R14                     ; Decrement R14
+            cmp     #0, R14                 ; Check if R14 is 0
+            jnz     D1                      ; repeat if R14 wasn't 0
+            cmp     #0, R15                 ; Check if R15 is 0
+            jnz     L1                      ; repeat if R15 wasn't 0
             jmp     Mainloop                ; Again
             NOP
 
@@ -119,5 +119,5 @@ ISR_TB0_CCR0:
             .short  RESET                   ;
 
             .sect   ".int43"                ; MSP430 CCR0 Vector
-            .short  ISR_TB0_CCR9
+            .short  ISR_TB0_CCR0
             .end
